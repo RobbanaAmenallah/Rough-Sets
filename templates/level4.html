@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Level 4: Face Recognition Lab — RoughSet Challenge{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 980px; margin: 0 auto;">
+    <!-- Level Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+        <div>
+            <div style="color: var(--primary-cyan); font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase;">
+                LEVEL 4 / 4 (PAPER APPLICATION)
+            </div>
+            <h2>👤 FACE RECOGNITION LAB</h2>
+            <p style="color: var(--primary-cyan); margin-top: 0.25rem;">From 10,304 raw pixels to discriminative Rough Set REDUCTS.</p>
+        </div>
+        <div style="width: 60px; height: 70px;">
+            <img src="{{ url_for('static', filename='images/face-placeholder.svg') }}" alt="Face Mesh" width="60" height="70">
+        </div>
+    </div>
+
+    <!-- Paper Pipeline Animated Flow -->
+    <div style="background: rgba(15, 23, 42, 0.85); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 2rem;">
+        <h4 style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; text-align: center;">
+            RESEARCH PAPER DIMENSIONALITY REDUCTION PIPELINE
+        </h4>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem;">
+            <div class="stat-card" style="min-width: 130px;">
+                <div style="font-size: 0.75rem; color: var(--text-dim);">STAGE 1</div>
+                <div style="font-weight: 700; color: #FFFFFF; font-size: 0.85rem;">RAW IMAGE</div>
+                <div style="font-size: 0.75rem; color: var(--primary-cyan);" class="mono">10,304 px</div>
+            </div>
+
+            <div style="color: var(--text-dim);" class="pulse-arrow">➔</div>
+
+            <div class="stat-card" style="min-width: 120px;">
+                <div style="font-size: 0.75rem; color: var(--text-dim);">STAGE 2</div>
+                <div style="font-weight: 700; color: #FFFFFF; font-size: 0.85rem;">SVD</div>
+                <div style="font-size: 0.75rem; color: var(--primary-cyan);" class="mono">92 features</div>
+            </div>
+
+            <div style="color: var(--text-dim);" class="pulse-arrow">➔</div>
+
+            <div class="stat-card" style="min-width: 120px;">
+                <div style="font-size: 0.75rem; color: var(--text-dim);">STAGE 3</div>
+                <div style="font-weight: 700; color: #FFFFFF; font-size: 0.85rem;">PCA</div>
+                <div style="font-size: 0.75rem; color: var(--primary-cyan);" class="mono">20 features</div>
+            </div>
+
+            <div style="color: var(--text-dim);" class="pulse-arrow">➔</div>
+
+            <div class="stat-card" style="min-width: 140px; border-color: var(--primary-cyan); background: rgba(6, 182, 212, 0.15);">
+                <div style="font-size: 0.75rem; color: var(--primary-cyan);">STAGE 4</div>
+                <div style="font-weight: 700; color: #FFFFFF; font-size: 0.85rem;">ROUGH SETS</div>
+                <div style="font-size: 0.75rem; color: var(--primary-cyan);" class="mono">MINIMAL REDUCT</div>
+            </div>
+
+            <div style="color: var(--accent-success);" class="pulse-arrow">➔</div>
+
+            <div class="stat-card" style="min-width: 130px; border-color: var(--accent-success); background: rgba(16, 185, 129, 0.15);">
+                <div style="font-size: 0.75rem; color: var(--accent-success);">FINAL</div>
+                <div style="font-weight: 700; color: #FFFFFF; font-size: 0.85rem;">LVQ CLASSIFIER</div>
+                <div style="font-size: 0.75rem; color: var(--accent-success);" class="mono">97.3% Acc (38 test)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mini Puzzle Description -->
+    <p style="font-size: 1.05rem; margin-bottom: 1.5rem;">
+        <strong>Lab Puzzle:</strong> Below are 6 discretized PCA eigencomponents for face identity classification. Find the minimal REDUCT of PCA features that maintains 100% identification ability!
+    </p>
+
+    <!-- PCA Pills Container -->
+    <div style="text-align: center; margin: 1.5rem 0;">
+        <div class="feature-pills-container">
+            {% for attr in level_data.condition_attributes %}
+            <button class="feature-pill active l4-pill" data-attr="{{ attr }}">
+                ✓ {{ attr }}
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- PCA Decision Table -->
+    <div class="table-responsive">
+        <table class="decision-table">
+            <thead>
+                <tr>
+                    <th>Sample Face</th>
+                    {% for attr in level_data.condition_attributes %}
+                    <th>{{ attr }}</th>
+                    {% endfor %}
+                    <th class="col-decision">{{ level_data.decision_attribute }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in level_data.objects %}
+                <tr>
+                    <td class="col-object">{{ obj.id }}</td>
+                    {% for attr in level_data.condition_attributes %}
+                    <td>{{ obj[attr] }}</td>
+                    {% endfor %}
+                    <td class="col-decision">{{ obj[level_data.decision_attribute] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Validate Button -->
+    <div style="text-align: center; margin-top: 1.5rem;">
+        <button id="btn-validate-face" class="btn btn-primary btn-lg">
+            <i data-lucide="scan-face"></i> VALIDATE FACE REDUCT
+        </button>
+    </div>
+
+    <!-- Dynamic Feedback Banner -->
+    <div id="l4-feedback" class="feedback-box"></div>
+
+    <!-- Educational Reveal & Continue Box (Hidden initially) -->
+    <div id="l4-continue-box" style="display: none; margin-top: 2rem; background: rgba(15, 23, 42, 0.95); border: 1px solid var(--accent-success); border-radius: var(--radius-md); padding: 2rem; text-align: center;" class="fade-in">
+        <h3 style="color: var(--accent-success); margin-bottom: 0.75rem;">
+            FACE LAB COMPLETE! (+400 XP)
+        </h3>
+        <p style="color: #E2E8F0; font-size: 1.05rem; max-width: 750px; margin: 0 auto 1.5rem;">
+            In the research paper, PCA reduces and projects high-dimensional geometric variance, while Rough Sets performs discrete rule-based attribute reduction to feed only the most discriminative components into the LVQ classifier.
+        </p>
+        <a href="/quiz" class="btn btn-success btn-lg">
+            TAKE FINAL COMPREHENSION QUIZ <i data-lucide="award"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/game.js') }}"></script>
+<script>
+    initLevel4();
+</script>
+{% endblock %}

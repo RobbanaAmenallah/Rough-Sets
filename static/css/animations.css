@@ -1,0 +1,112 @@
+/* ==========================================================
+   ROUGHSET CHALLENGE - CSS MICRO-ANIMATIONS & EFFECTS
+   ========================================================== */
+
+/* Fade in */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Floating XP Toast */
+@keyframes toastPop {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.85);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Shake on incorrect feature removal */
+@keyframes errorShake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+}
+
+.shake {
+    animation: errorShake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* Success Glow Pulse */
+@keyframes successPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(16, 185, 129, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+.glow-success {
+    animation: successPulse 1.2s infinite;
+}
+
+/* Lock Close Animation for Level 2 CORE */
+@keyframes lockSnap {
+    0% { transform: scale(1.4) rotate(-15deg); opacity: 0; }
+    50% { transform: scale(0.9) rotate(5deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.lock-animate {
+    display: inline-block;
+    animation: lockSnap 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Pipeline Flow Indicator for Level 4 */
+@keyframes pulseArrow {
+    0%, 100% { opacity: 0.3; transform: translateX(0); }
+    50% { opacity: 1; transform: translateX(4px); }
+}
+
+.pulse-arrow {
+    animation: pulseArrow 1.5s ease-in-out infinite;
+}
+
+/* Confetti particle simulation (pure CSS) */
+.confetti-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 9999;
+}
+
+.confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 16px;
+    opacity: 0.9;
+    animation: fallDown 3s linear infinite;
+}
+
+@keyframes fallDown {
+    0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(105vh) rotate(720deg);
+        opacity: 0;
+    }
+}

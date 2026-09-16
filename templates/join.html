@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Join Session — RoughSet Challenge{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 480px; margin: 0 auto; text-align: center;">
+    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🧪</div>
+    <h2>ENTER THE AI LAB</h2>
+    <p style="margin-bottom: 2rem; font-size: 0.95rem;">
+        Enter your classroom code to join the live challenge.
+    </p>
+
+    {% if error %}
+    <div class="feedback-box show feedback-danger" style="margin-bottom: 1.5rem; text-align: left;">
+        <strong>Error:</strong> {{ error }}
+    </div>
+    {% endif %}
+
+    <form action="/join" method="POST">
+        <div class="form-group">
+            <label class="form-label" for="code">Session Code</label>
+            <input type="text" id="code" name="code" class="form-control mono" 
+                   placeholder="e.g. RS4821" required autofocus 
+                   style="text-transform: uppercase; font-size: 1.25rem; letter-spacing: 2px; text-align: center;"
+                   value="{{ code or '' }}">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first_name" class="form-control" 
+                   placeholder="e.g. Alex" required
+                   value="{{ first_name or '' }}">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="nickname">Nickname or Student ID (Optional)</label>
+            <input type="text" id="nickname" name="nickname" class="form-control" 
+                   placeholder="e.g. alex_data or 220194"
+                   value="{{ nickname or '' }}">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 1rem;">
+            <i data-lucide="log-in"></i> ENTER THE LAB
+        </button>
+    </form>
+
+    <div style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1rem; font-size: 0.85rem; color: var(--text-dim);">
+        Presenter or Teacher? <a href="/admin/login" style="color: var(--primary-cyan); text-decoration: none; font-weight: 600;">Admin Dashboard</a>
+    </div>
+</div>
+{% endblock %}

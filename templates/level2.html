@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Level 2: Unlock the CORE — RoughSet Challenge{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 920px; margin: 0 auto;">
+    <!-- Level Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+        <div>
+            <div style="color: var(--primary-purple); font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase;">
+                LEVEL 2 / 4
+            </div>
+            <h2>🔐 UNLOCK THE CORE</h2>
+        </div>
+        <div style="background: rgba(139, 92, 246, 0.15); border: 1px solid var(--primary-purple); padding: 0.4rem 1.25rem; border-radius: var(--radius-full); font-size: 0.9rem; color: #C084FC; font-weight: 600;">
+            Target: Discover the Indispensable CORE
+        </div>
+    </div>
+
+    <p style="font-size: 1.05rem; margin-bottom: 1.5rem;">
+        <strong>Mission:</strong> Some features are indispensable—removing them destroys diagnosis accuracy. Test each feature to identify the <strong>CORE</strong>.
+    </p>
+
+    <!-- Interactive Decision Table -->
+    <div class="table-responsive">
+        <table class="decision-table">
+            <thead>
+                <tr>
+                    <th>Patient</th>
+                    {% for attr in level_data.condition_attributes %}
+                    <th>{{ attr }}</th>
+                    {% endfor %}
+                    <th class="col-decision">{{ level_data.decision_attribute }} (Target)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in level_data.objects %}
+                <tr>
+                    <td class="col-object">{{ obj.id }}</td>
+                    {% for attr in level_data.condition_attributes %}
+                    <td>{{ obj[attr] }}</td>
+                    {% endfor %}
+                    <td class="col-decision">{{ obj[level_data.decision_attribute] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Attribute Testing Buttons Grid -->
+    <div style="margin: 2rem 0; text-align: center;">
+        <h4 style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;">
+            TEST ATTRIBUTE REMOVAL
+        </h4>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center;">
+            {% for attr in level_data.condition_attributes %}
+            <button class="btn btn-secondary l2-attr-btn" data-attr="{{ attr }}">
+                🔍 TEST {{ attr }}
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Live CORE Accumulator Card -->
+    <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; text-align: center; margin-bottom: 1.5rem;">
+        <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); margin-bottom: 0.25rem;">
+            DISCOVERED CORE ATTRIBUTES
+        </div>
+        <div id="l2-core-items" style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 800; color: var(--primary-purple);">
+            { ... }
+        </div>
+    </div>
+
+    <!-- Dynamic Feedback Banner -->
+    <div id="l2-feedback" class="feedback-box"></div>
+
+    <!-- Educational Reveal & Continue Box (Hidden initially) -->
+    <div id="l2-continue-box" style="display: none; margin-top: 2rem; background: rgba(15, 23, 42, 0.95); border: 1px solid var(--primary-purple); border-radius: var(--radius-md); padding: 2rem; text-align: center;" class="fade-in">
+        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔐</div>
+        <h3 style="color: #C084FC; margin-bottom: 0.5rem;">
+            CORE UNLOCKED! (+300 XP)
+        </h3>
+        <p style="color: #E2E8F0; font-size: 1.05rem; max-width: 700px; margin: 0 auto 1.5rem;">
+            The <strong>CORE</strong> contains all attributes that are strictly indispensable with respect to classification.
+            Removing any attribute in the CORE causes immediate classification failure.
+        </p>
+        <a href="/game/3" class="btn btn-primary btn-lg">
+            CONTINUE TO REDUCT CHALLENGE <i data-lucide="arrow-right"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/game.js') }}"></script>
+<script>
+    initLevel2();
+</script>
+{% endblock %}

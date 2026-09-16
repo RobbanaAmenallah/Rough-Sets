@@ -1,0 +1,22 @@
+# Environment & Secrets
+.env
+serviceAccountKey.json
+firebase-key.json
+*.json
+!render.yaml
+
+# Local database
+*.db
+roughset_local.db
+
+# Python cache & virtual environments
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+env/
+
+# IDE files
+.vscode/
+.idea/

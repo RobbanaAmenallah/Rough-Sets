@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}RoughSet Challenge — An Interactive AI Educational Game{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="text-align: center; max-width: 850px; margin: 0 auto; padding: 3.5rem 2rem;">
+    <!-- Brand Icon -->
+    <div style="width: 84px; height: 84px; margin: 0 auto 1.5rem;">
+        <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="RoughSet Challenge Logo" width="84" height="84">
+    </div>
+
+    <!-- Main Title & Tagline -->
+    <h1 style="margin-bottom: 0.75rem; letter-spacing: -0.5px;">
+        <span class="gradient-text">ROUGHSET CHALLENGE</span>
+    </h1>
+    <h3 style="color: var(--primary-cyan); font-weight: 600; margin-bottom: 1.25rem;">
+        “Can you reduce the data without losing the knowledge?”
+    </h3>
+    <p style="font-size: 1.15rem; max-width: 650px; margin: 0 auto 2rem; color: var(--text-muted);">
+        An interactive journey through <strong>Feature Selection</strong>, <strong>Dispensability</strong>, 
+        <strong>CORE</strong>, and <strong>REDUCT</strong> based on Rough Sets theory.
+    </p>
+
+    <!-- Mission Stats Badges -->
+    <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2.5rem; font-family: var(--font-mono); font-size: 0.95rem; color: var(--text-dim);">
+        <span style="color: var(--primary-cyan); font-weight: 700;">4 LEVELS</span>
+        <span>•</span>
+        <span style="color: var(--primary-purple); font-weight: 700;">1 MISSION</span>
+        <span>•</span>
+        <span style="color: var(--accent-success); font-weight: 700;">~8 MINUTES</span>
+    </div>
+
+    <!-- Call to Actions -->
+    <div style="display: flex; gap: 1.25rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3.5rem;">
+        <a href="/join" class="btn btn-primary btn-lg">
+            <i data-lucide="play"></i> START CHALLENGE
+        </a>
+        <a href="/leaderboard" class="btn btn-secondary btn-lg">
+            <i data-lucide="trophy"></i> VIEW LEADERBOARD
+        </a>
+        <a href="/demo" class="btn btn-secondary btn-lg" style="border-style: dashed;">
+            <i data-lucide="terminal"></i> DEMO MODE
+        </a>
+    </div>
+
+    <!-- How It Works Flow Sequence -->
+    <div style="border-top: 1px solid var(--border-color); padding-top: 2.5rem; text-align: center;">
+        <h4 style="text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.85rem; color: var(--text-dim); margin-bottom: 1.75rem;">
+            HOW IT WORKS
+        </h4>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; align-items: center;">
+            <div class="stat-card">
+                <div style="font-size: 1.6rem; margin-bottom: 0.4rem;">🔍</div>
+                <div style="font-weight: 700; color: var(--text-main); font-size: 0.9rem;">1. Explore</div>
+                <div style="font-size: 0.75rem; color: var(--text-dim);">Inspect features</div>
+            </div>
+            <div class="stat-card">
+                <div style="font-size: 1.6rem; margin-bottom: 0.4rem;">🗑️</div>
+                <div style="font-weight: 700; color: var(--text-main); font-size: 0.9rem;">2. Dispensable</div>
+                <div style="font-size: 0.75rem; color: var(--text-dim);">Cut redundancy</div>
+            </div>
+            <div class="stat-card">
+                <div style="font-size: 1.6rem; margin-bottom: 0.4rem;">🔒</div>
+                <div style="font-weight: 700; color: var(--text-main); font-size: 0.9rem;">3. Find CORE</div>
+                <div style="font-size: 0.75rem; color: var(--text-dim);">Locked features</div>
+            </div>
+            <div class="stat-card">
+                <div style="font-size: 1.6rem; margin-bottom: 0.4rem;">✂️</div>
+                <div style="font-weight: 700; color: var(--text-main); font-size: 0.9rem;">4. REDUCT</div>
+                <div style="font-size: 0.75rem; color: var(--text-dim);">Minimal subset</div>
+            </div>
+            <div class="stat-card">
+                <div style="font-size: 1.6rem; margin-bottom: 0.4rem;">👤</div>
+                <div style="font-weight: 700; color: var(--text-main); font-size: 0.9rem;">5. Face Lab</div>
+                <div style="font-size: 0.75rem; color: var(--text-dim);">Paper application</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 2rem; font-size: 1.1rem; font-weight: 700; color: var(--primary-cyan);">
+            “Less Data. Same Knowledge.”
+        </div>
+    </div>
+</div>
+{% endblock %}

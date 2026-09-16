@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Leaderboard — RoughSet Challenge{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 1000px; margin: 0 auto; padding: 2.5rem 2rem;">
+    <!-- Leaderboard Header -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.25rem;">🏆</div>
+        <h1 style="margin-bottom: 0.25rem;">
+            <span class="gradient-text">ROUGHSET CHALLENGE</span> LEADERBOARD
+        </h1>
+        <p style="color: var(--text-dim); font-size: 0.95rem;">
+            Session Code: <span class="mono" style="color: var(--primary-cyan); font-weight: 700;">{{ classroom.code if classroom else 'LIVE CLASS' }}</span>
+            • Updates live every 5 seconds
+        </p>
+    </div>
+
+    <!-- Challenge Ended Banner (if ended) -->
+    <div id="challenge-ended-banner" class="feedback-box feedback-success" style="text-align: center; margin-bottom: 2rem; {% if not challenge_ended %}display: none;{% else %}display: block;{% endif %}">
+        <h2 style="color: var(--accent-success); margin-bottom: 0.25rem;">🏆 CHALLENGE COMPLETE!</h2>
+        <p style="font-size: 1.1rem; color: #FFFFFF;">Congratulations to all Rough Set Masters!</p>
+    </div>
+
+    <!-- Podium Top 3 -->
+    <div class="podium-container">
+        <!-- 2nd Place Silver -->
+        <div class="podium-step silver">
+            <div class="podium-rank">🥈</div>
+            <div class="podium-name" id="podium-silver-name">
+                {{ leaderboard[1].first_name if leaderboard|length > 1 else 'Waiting...' }}
+            </div>
+            <div class="podium-score" id="podium-silver-score">
+                {{ leaderboard[1].score ~ ' XP' if leaderboard|length > 1 else '--' }}
+            </div>
+        </div>
+
+        <!-- 1st Place Gold -->
+        <div class="podium-step gold">
+            <div class="podium-rank">🥇</div>
+            <div class="podium-name" id="podium-gold-name" style="font-size: 1.3rem; color: #FBBF24;">
+                {{ leaderboard[0].first_name if leaderboard|length > 0 else 'Waiting...' }}
+            </div>
+            <div class="podium-score" id="podium-gold-score" style="font-size: 1.15rem; color: #FBBF24;">
+                {{ leaderboard[0].score ~ ' XP' if leaderboard|length > 0 else '--' }}
+            </div>
+        </div>
+
+        <!-- 3rd Place Bronze -->
+        <div class="podium-step bronze">
+            <div class="podium-rank">🥉</div>
+            <div class="podium-name" id="podium-bronze-name">
+                {{ leaderboard[2].first_name if leaderboard|length > 2 else 'Waiting...' }}
+            </div>
+            <div class="podium-score" id="podium-bronze-score">
+                {{ leaderboard[2].score ~ ' XP' if leaderboard|length > 2 else '--' }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Rankings Table -->
+    <div class="table-responsive" style="margin-top: 2rem;">
+        <table class="decision-table">
+            <thead>
+                <tr>
+                    <th style="width: 80px;">Rank</th>
+                    <th style="text-align: left; padding-left: 1.5rem;">Player</th>
+                    <th>Score</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboard-body">
+                {% for p in leaderboard %}
+                <tr {% if player and p.player_id == player.id %}style="background: rgba(6, 182, 212, 0.2); border-left: 4px solid var(--primary-cyan);"{% endif %}>
+                    <td style="font-weight: 800; font-size: 1.1rem;">
+                        {% if loop.index == 1 %}🥇{% elif loop.index == 2 %}🥈{% elif loop.index == 3 %}🥉{% else %}#{{ loop.index }}{% endif %}
+                    </td>
+                    <td style="text-align: left; padding-left: 1.5rem; font-weight: 600;">
+                        {{ p.first_name }}
+                        <span style="color: var(--text-dim); font-size: 0.85rem;">(@{{ p.nickname }})</span>
+                        {% if player and p.player_id == player.id %}
+                        <span style="color: var(--primary-cyan); font-weight: 700; margin-left: 5px;">(YOU)</span>
+                        {% endif %}
+                    </td>
+                    <td style="font-family: var(--font-mono); font-weight: 700; color: var(--primary-cyan);">
+                        {{ p.score }} XP
+                    </td>
+                    <td style="font-family: var(--font-mono);">
+                        {{ p.duration_formatted }}
+                    </td>
+                    <td>
+                        {% if p.completed %}
+                        <span style="color: var(--accent-success); font-weight: 700;">✓ FINISHED</span>
+                        {% else %}
+                        <span style="color: var(--primary-cyan);">LEVEL {{ p.level }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: var(--text-dim); padding: 2rem;">
+                        No students have joined this session yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bottom Actions -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+        <a href="/" class="btn btn-secondary">
+            <i data-lucide="home"></i> Home
+        </a>
+        <a href="/admin" class="btn btn-secondary" style="font-size: 0.85rem;">
+            Teacher Admin <i data-lucide="settings"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/leaderboard.js') }}"></script>
+<script>
+    initLeaderboardPolling("{{ player.id if player else '' }}");
+</script>
+{% endblock %}

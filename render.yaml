@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: roughset-challenge
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: FLASK_SECRET_KEY
+        generateValue: true
+      - key: ADMIN_USERNAME
+        value: Amenallah
+      - key: ADMIN_PASSWORD
+        value: Amen1920
+      - key: FIREBASE_CREDENTIALS_JSON
+        sync: false

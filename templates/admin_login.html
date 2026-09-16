@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Login — RoughSet Challenge{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 440px; margin: 0 auto; text-align: center;">
+    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔐</div>
+    <h2>INSTRUCTOR LOGIN</h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem;">
+        Manage classroom challenge sessions and view live analytics.
+    </p>
+
+    {% if error %}
+    <div class="feedback-box show feedback-danger" style="margin-bottom: 1.5rem; text-align: left;">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <form action="/admin/login" method="POST">
+        <div class="form-group">
+            <label class="form-label" for="username">Username</label>
+            <input type="text" id="username" name="username" class="form-control" required autofocus placeholder="Amenallah">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" required placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 1rem;">
+            <i data-lucide="shield-check"></i> LOG IN AS INSTRUCTOR
+        </button>
+    </form>
+</div>
+{% endblock %}

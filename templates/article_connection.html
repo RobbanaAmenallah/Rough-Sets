@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}From Game to Paper — RoughSet Challenge{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 900px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 2.5rem;">
+        <div style="color: var(--primary-cyan); font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase;">
+            ACADEMIC CONTEXT
+        </div>
+        <h2>FROM THE GAME TO THE PAPER</h2>
+        <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 700px; margin: 0.5rem auto 0;">
+            How your gameplay directly maps to the research findings in <em>“Rough Sets Methods in Feature Reduction and Classification”</em>.
+        </p>
+    </div>
+
+    <!-- Comparison Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+        {% for comp in comparisons %}
+        <div class="glass-card" style="background: rgba(15, 23, 42, 0.85); padding: 1.75rem;">
+            <!-- Game Concept -->
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                <div style="background: rgba(6, 182, 212, 0.15); color: var(--primary-cyan); padding: 0.5rem; border-radius: var(--radius-sm);">
+                    <i data-lucide="{{ comp.icon }}"></i>
+                </div>
+                <div>
+                    <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-dim); letter-spacing: 1px;">WHAT YOU PLAYED</div>
+                    <div style="font-weight: 700; color: #FFFFFF; font-size: 1.05rem;">{{ comp.game_title }}</div>
+                </div>
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+                {{ comp.game_desc }}
+            </p>
+
+            <div style="border-top: 1px dashed var(--border-color); padding-top: 1rem;">
+                <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--primary-purple); letter-spacing: 1px; font-weight: 700;">IN THE RESEARCH PAPER</div>
+                <div style="font-weight: 700; color: #C084FC; font-size: 1.05rem; margin-bottom: 0.25rem;">{{ comp.paper_title }}</div>
+                <p style="font-size: 0.9rem; color: #E2E8F0; margin-bottom: 0;">
+                    {{ comp.paper_desc }}
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Core Philosophy Quote -->
+    <div style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border: 1px solid var(--primary-cyan); border-radius: var(--radius-md); padding: 2rem; text-align: center; margin-bottom: 2.5rem;">
+        <h3 style="color: #FFFFFF; margin-bottom: 0.75rem;">
+            “The goal is not simply to remove data.<br>
+            The goal is to remove unnecessary information while preserving what is needed for classification.”
+        </h3>
+        <p style="color: var(--primary-cyan); font-weight: 700; font-size: 1.1rem; margin-bottom: 0;">
+            — Less Data. Same Knowledge.
+        </p>
+    </div>
+
+    <!-- Final Result CTA -->
+    <div style="text-align: center;">
+        <a href="/result" class="btn btn-primary btn-lg">
+            VIEW FINAL MISSION RESULTS <i data-lucide="trophy"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}

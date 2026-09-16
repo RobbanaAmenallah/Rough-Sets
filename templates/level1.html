@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Level 1: Feature Hunter — RoughSet Challenge{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 900px; margin: 0 auto;">
+    <!-- Level Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+        <div>
+            <div style="color: var(--primary-cyan); font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase;">
+                LEVEL 1 / 4
+            </div>
+            <h2>🔍 FEATURE HUNTER</h2>
+        </div>
+        <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid var(--primary-cyan); padding: 0.4rem 1rem; border-radius: var(--radius-full); font-size: 0.9rem; color: var(--primary-cyan); font-weight: 600;">
+            Target: Find a Dispensable Feature
+        </div>
+    </div>
+
+    <p style="font-size: 1.05rem; margin-bottom: 1.5rem;">
+        <strong>Mission:</strong> Click on an attribute column header below to select it, then test if removing it harms the classification.
+    </p>
+
+    <!-- Interactive Decision Table -->
+    <div class="table-responsive">
+        <table class="decision-table" id="l1-table">
+            <thead>
+                <tr>
+                    <th>Object</th>
+                    {% for attr in level_data.condition_attributes %}
+                    <th class="col-attr" data-attr="{{ attr }}" title="Click to test removing this attribute">
+                        {{ attr }} 🔍
+                    </th>
+                    {% endfor %}
+                    <th class="col-decision">{{ level_data.decision_attribute }} (Target)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in level_data.objects %}
+                <tr>
+                    <td class="col-object">{{ obj.id }}</td>
+                    {% for attr in level_data.condition_attributes %}
+                    <td data-attr="{{ attr }}">{{ obj[attr] }}</td>
+                    {% endfor %}
+                    <td class="col-decision">{{ obj[level_data.decision_attribute] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Action Controls -->
+    <div style="text-align: center; margin-top: 1.5rem;">
+        <button id="btn-remove-feature" class="btn btn-primary btn-lg" disabled>
+            SELECT A COLUMN TO REMOVE
+        </button>
+    </div>
+
+    <!-- Dynamic Feedback Banner -->
+    <div id="l1-feedback" class="feedback-box"></div>
+
+    <!-- Educational Reveal & Continue Box (Hidden initially) -->
+    <div id="l1-continue-box" style="display: none; margin-top: 2rem; background: rgba(15, 23, 42, 0.9); border: 1px solid var(--accent-success); border-radius: var(--radius-md); padding: 1.75rem; text-align: center;" class="fade-in">
+        <h3 style="color: var(--accent-success); margin-bottom: 0.5rem;">
+            WHAT YOU JUST DISCOVERED: DISPENSABLE ATTRIBUTE
+        </h3>
+        <p style="color: #E2E8F0; font-size: 1.05rem; max-width: 700px; margin: 0 auto 1.5rem;">
+            You removed a feature without changing the required classification (100% classification power preserved).
+            In Rough Sets terminology, this feature is <strong>DISPENSABLE</strong>.
+        </p>
+        <a href="/game/2" class="btn btn-success btn-lg">
+            CONTINUE TO LEVEL 2 <i data-lucide="arrow-right"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/game.js') }}"></script>
+<script>
+    initLevel1();
+</script>
+{% endblock %}

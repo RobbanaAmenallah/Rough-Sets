@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Mission Complete — RoughSet Challenge{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 760px; margin: 0 auto; text-align: center; padding: 3.5rem 2rem;">
+    <!-- Complete Badge -->
+    <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">🎉</div>
+    <div style="color: var(--accent-success); font-weight: 800; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase;">
+        MISSION ACCOMPLISHED
+    </div>
+    <h1 style="margin: 0.5rem 0 1.5rem;">
+        EXCELLENT JOB, <span class="gradient-text">{{ player.first_name }}</span>!
+    </h1>
+
+    <!-- Summary Stats Grid -->
+    <div class="stats-grid" style="margin: 2rem 0;">
+        <div class="stat-card" style="padding: 1.5rem;">
+            <div class="stat-title">FINAL SCORE</div>
+            <div class="stat-val" style="font-size: 1.8rem; color: var(--primary-cyan);">
+                {{ player.progress.score }} <span style="font-size: 1rem;">XP</span>
+            </div>
+        </div>
+
+        <div class="stat-card" style="padding: 1.5rem;">
+            <div class="stat-title">OFFICIAL TIME</div>
+            <div class="stat-val" style="font-size: 1.8rem; color: #FFFFFF;">
+                {{ duration_formatted }}
+            </div>
+        </div>
+
+        <div class="stat-card" style="padding: 1.5rem;">
+            <div class="stat-title">CURRENT RANK</div>
+            <div class="stat-val" style="font-size: 1.8rem; color: #F59E0B;">
+                #{{ rank }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Earned Achievements Grid -->
+    <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.75rem; margin-bottom: 2.5rem; text-align: left;">
+        <h4 style="color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; text-align: center;">
+            UNLOCKED SCIENTIFIC ACHIEVEMENTS
+        </h4>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div style="font-size: 1.5rem;">🔍</div>
+                <div>
+                    <div style="font-weight: 700; color: #FFFFFF; font-size: 0.9rem;">Feature Hunter</div>
+                    <div style="font-size: 0.75rem; color: var(--accent-success);">Dispensable attributes</div>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div style="font-size: 1.5rem;">🔐</div>
+                <div>
+                    <div style="font-weight: 700; color: #FFFFFF; font-size: 0.9rem;">CORE Hunter</div>
+                    <div style="font-size: 0.75rem; color: var(--accent-success);">Indispensable set</div>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div style="font-size: 1.5rem;">✂️</div>
+                <div>
+                    <div style="font-weight: 700; color: #FFFFFF; font-size: 0.9rem;">REDUCT Master</div>
+                    <div style="font-size: 0.75rem; color: var(--accent-success);">Minimal discernibility</div>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div style="font-size: 1.5rem;">👤</div>
+                <div>
+                    <div style="font-weight: 700; color: #FFFFFF; font-size: 0.9rem;">Face AI Expert</div>
+                    <div style="font-size: 0.75rem; color: var(--accent-success);">SVD + PCA + Rough Sets</div>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div style="font-size: 1.5rem;">🧠</div>
+                <div>
+                    <div style="font-weight: 700; color: #FFFFFF; font-size: 0.9rem;">Knowledge Explorer</div>
+                    <div style="font-size: 0.75rem; color: var(--accent-success);">Full quiz complete</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Actions -->
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="/leaderboard" class="btn btn-primary btn-lg">
+            <i data-lucide="trophy"></i> VIEW LIVE LEADERBOARD
+        </a>
+        <a href="/article" class="btn btn-secondary btn-lg">
+            <i data-lucide="book-open"></i> REVIEW WHAT I LEARNED
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    triggerConfetti();
+</script>
+{% endblock %}

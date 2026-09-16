@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Level 3: Find the REDUCT — RoughSet Challenge{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 960px; margin: 0 auto;">
+    <!-- Level Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+        <div>
+            <div style="color: var(--primary-cyan); font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase;">
+                LEVEL 3 / 4 (MAIN PUZZLE)
+            </div>
+            <h2>✂️ FIND THE REDUCT</h2>
+        </div>
+        <div style="background: rgba(6, 182, 212, 0.15); border: 1px solid var(--primary-cyan); padding: 0.4rem 1.25rem; border-radius: var(--radius-full); font-size: 0.9rem; color: var(--primary-cyan); font-weight: 600;">
+            Target: Minimal 100% Subset
+        </div>
+    </div>
+
+    <p style="font-size: 1.05rem; margin-bottom: 1.5rem;">
+        <strong>Mission:</strong> Toggle features ON or OFF below. Find a <strong>minimal</strong> subset of features that retains 100% classification power.
+    </p>
+
+    <!-- Live REDUCT Dashboard -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-title">FEATURES</div>
+            <div class="stat-val" id="l3-feat-count">8 → 8</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">CLASSIFICATION POWER</div>
+            <div class="stat-val" style="color: var(--accent-success);">100% ✓</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">DATA REDUCTION</div>
+            <div class="stat-val" id="l3-reduction-rate">0%</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">ATTEMPTS</div>
+            <div class="stat-val" id="l3-attempts">0</div>
+        </div>
+    </div>
+
+    <!-- Feature Selection Pills -->
+    <div style="text-align: center; margin: 2rem 0;">
+        <h4 style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;">
+            TOGGLE ACTIVE ATTRIBUTES
+        </h4>
+        <div class="feature-pills-container">
+            {% for attr in level_data.condition_attributes %}
+            <button class="feature-pill active l3-pill" data-attr="{{ attr }}">
+                ✓ {{ attr }}
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Decision Table Reference -->
+    <div class="table-responsive">
+        <table class="decision-table">
+            <thead>
+                <tr>
+                    <th>Object</th>
+                    {% for attr in level_data.condition_attributes %}
+                    <th>{{ attr }}</th>
+                    {% endfor %}
+                    <th class="col-decision">{{ level_data.decision_attribute }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in level_data.objects %}
+                <tr>
+                    <td class="col-object">{{ obj.id }}</td>
+                    {% for attr in level_data.condition_attributes %}
+                    <td>{{ obj[attr] }}</td>
+                    {% endfor %}
+                    <td class="col-decision">{{ obj[level_data.decision_attribute] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Action Button -->
+    <div style="text-align: center; margin-top: 2rem;">
+        <button id="btn-check-reduct" class="btn btn-primary btn-lg">
+            <i data-lucide="check-circle-2"></i> CHECK MY REDUCT
+        </button>
+    </div>
+
+    <!-- Dynamic Feedback Banner -->
+    <div id="l3-feedback" class="feedback-box"></div>
+
+    <!-- Educational Reveal & Continue Box (Hidden initially) -->
+    <div id="l3-continue-box" style="display: none; margin-top: 2rem; background: rgba(15, 23, 42, 0.95); border: 1px solid var(--accent-success); border-radius: var(--radius-md); padding: 2rem; text-align: center;" class="fade-in">
+        <h3 style="color: var(--accent-success); margin-bottom: 0.5rem;">
+            REDUCT MASTER! ✂️ (+500 XP)
+        </h3>
+        <p style="color: #E2E8F0; font-size: 1.05rem; max-width: 700px; margin: 0 auto 1.5rem;">
+            You discovered a genuine minimal REDUCT. You removed unnecessary dimensions while retaining 100% discernibility.
+        </p>
+        <a href="/game/4" class="btn btn-success btn-lg">
+            ENTER FACE RECOGNITION LAB <i data-lucide="arrow-right"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/game.js') }}"></script>
+<script>
+    initLevel3();
+</script>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Demo Sandbox — RoughSet Challenge{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 800px; margin: 0 auto; text-align: center; padding: 3rem 2rem;">
+    <div style="display: inline-block; background: rgba(245, 158, 11, 0.15); border: 1px solid var(--accent-warning); border-radius: var(--radius-full); padding: 0.4rem 1.25rem; color: var(--accent-warning); font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1.5rem;">
+        SANDBOX DEMO MODE
+    </div>
+
+    <h1>PRESENTER DEMO MODE</h1>
+    <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0.75rem auto 2rem;">
+        Use Demo Mode to demonstrate the application to students or test gameplay mechanics. Demo scores are completely isolated and never enter the classroom leaderboard.
+    </p>
+
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
+        <form action="/demo/start" method="POST">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i data-lucide="play"></i> LAUNCH INSTANT DEMO SESSION
+            </button>
+        </form>
+        <a href="/" class="btn btn-secondary btn-lg">
+            Return to Landing Page
+        </a>
+    </div>
+
+    <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; text-align: left; font-size: 0.9rem; color: var(--text-dim);">
+        <strong>Demo Mode Features:</strong>
+        <ul style="margin-left: 1.25rem; margin-top: 0.5rem; line-height: 1.8;">
+            <li>Auto-creates an isolated Demo Player (<code>Demo_Presenter</code>)</li>
+            <li>Enables instant testing of Level 1, 2, 3, 4, Quiz, and Article connections</li>
+            <li>Keeps real student leaderboard completely untouched</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
