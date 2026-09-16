@@ -362,6 +362,35 @@ def admin_logout():
     return redirect(url_for("admin_login"))
 
 
+@app.route("/api/admin/live")
+@admin_required
+def api_admin_live():
+    """Real-time live polling endpoint for instructor admin dashboard."""
+    try:
+        active_code = request.args.get("code", "").strip().upper() or session.get("active_admin_code")
+        active_session = db.get_classroom_by_code(active_code) if active_code else None
+
+        if not active_session:
+            active_session = db.get_latest_classroom()
+
+        if not active_session:
+            return jsonify({"error": "No active classroom session found"}), 404
+
+        stats = db.get_classroom_stats(active_session["id"])
+        return jsonify({
+            "session": {
+                "id": active_session["id"],
+                "code": active_session["code"],
+                "active": bool(active_session.get("active", True)),
+                "joining_open": bool(active_session.get("joining_open", True))
+            },
+            "stats": stats
+        })
+    except Exception as e:
+        app.logger.error(f"Error in api_admin_live: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
 # ==========================================================
 # GAMEPLAY REST APIS (SERVER-AUTHORITATIVE)
 # ==========================================================

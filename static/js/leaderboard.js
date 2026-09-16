@@ -17,17 +17,32 @@ function renderLeaderboard(data, currentSessionPlayerId) {
     if (!listBody) return;
 
     // Update Podium Top 3
-    if (data.length > 0 && goldName) {
-        goldName.textContent = data[0].first_name || data[0].nickname;
-        goldScore.textContent = `${data[0].score.toLocaleString()} XP (${data[0].duration_formatted})`;
+    if (goldName) {
+        if (data.length > 0) {
+            goldName.textContent = data[0].first_name || data[0].nickname;
+            goldScore.textContent = `${data[0].score.toLocaleString()} XP (${data[0].duration_formatted})`;
+        } else {
+            goldName.textContent = 'Waiting...';
+            goldScore.textContent = '--';
+        }
     }
-    if (data.length > 1 && silverName) {
-        silverName.textContent = data[1].first_name || data[1].nickname;
-        silverScore.textContent = `${data[1].score.toLocaleString()} XP (${data[1].duration_formatted})`;
+    if (silverName) {
+        if (data.length > 1) {
+            silverName.textContent = data[1].first_name || data[1].nickname;
+            silverScore.textContent = `${data[1].score.toLocaleString()} XP (${data[1].duration_formatted})`;
+        } else {
+            silverName.textContent = 'Waiting...';
+            silverScore.textContent = '--';
+        }
     }
-    if (data.length > 2 && bronzeName) {
-        bronzeName.textContent = data[2].first_name || data[2].nickname;
-        bronzeScore.textContent = `${data[2].score.toLocaleString()} XP (${data[2].duration_formatted})`;
+    if (bronzeName) {
+        if (data.length > 2) {
+            bronzeName.textContent = data[2].first_name || data[2].nickname;
+            bronzeScore.textContent = `${data[2].score.toLocaleString()} XP (${data[2].duration_formatted})`;
+        } else {
+            bronzeName.textContent = 'Waiting...';
+            bronzeScore.textContent = '--';
+        }
     }
 
     // Build Table Rows
@@ -64,7 +79,7 @@ function renderLeaderboard(data, currentSessionPlayerId) {
 
 function escapeHtml(str) {
     if (!str) return '';
-    return str.replace(/[&<>"']/g, function (m) {
+    return String(str).replace(/[&<>"']/g, function (m) {
         return {
             '&': '&amp;',
             '<': '&lt;',
@@ -95,5 +110,6 @@ async function fetchLeaderboard(currentSessionPlayerId) {
 
 function initLeaderboardPolling(currentSessionPlayerId) {
     fetchLeaderboard(currentSessionPlayerId);
-    pollInterval = setInterval(() => fetchLeaderboard(currentSessionPlayerId), 5000);
+    if (pollInterval) clearInterval(pollInterval);
+    pollInterval = setInterval(() => fetchLeaderboard(currentSessionPlayerId), 2500);
 }
