@@ -169,16 +169,39 @@ def result():
 def leaderboard():
     """Projector-friendly live classroom rankings."""
     try:
-        classroom_id = session.get("classroom_id")
-        classroom = db.get_classroom_by_id(classroom_id) if classroom_id else None
+        code_param = request.args.get("code", "").strip().upper()
+        classroom = None
 
+        # 1. Query parameter code (e.g. /leaderboard?code=RS8371)
+        if code_param:
+            classroom = db.get_classroom_by_code(code_param)
+
+        # 2. Student session classroom_id
         if not classroom:
-            # Fallback to demo classroom or create default one
+            classroom_id = session.get("classroom_id")
+            if classroom_id:
+                classroom = db.get_classroom_by_id(classroom_id)
+
+        # 3. Instructor active admin code
+        if not classroom:
+            admin_code = session.get("active_admin_code")
+            if admin_code:
+                classroom = db.get_classroom_by_code(admin_code)
+
+        # 4. Fallback to latest active/recent classroom
+        if not classroom:
+            classroom = db.get_latest_classroom()
+
+        # 5. Fallback to demo classroom
+        if not classroom:
             demo_class = db.get_classroom_by_code("DEMO99")
             if not demo_class:
                 demo_class = db.create_classroom("DEMO99")
             classroom = demo_class
-            classroom_id = demo_class["id"]
+
+        classroom_id = classroom["id"] if classroom else None
+        if classroom_id:
+            session["classroom_id"] = classroom_id
 
         board_data = db.get_leaderboard(classroom_id) if classroom_id else []
         challenge_ended = not classroom.get("active", True) if classroom else False
@@ -516,22 +539,39 @@ def api_quiz_answer():
 def api_leaderboard():
     """Live polling endpoint for projector and client screens."""
     try:
-        classroom_id = session.get("classroom_id")
-        classroom = db.get_classroom_by_id(classroom_id) if classroom_id else None
+        code_param = request.args.get("code", "").strip().upper()
+        classroom = None
+
+        if code_param:
+            classroom = db.get_classroom_by_code(code_param)
+
+        if not classroom:
+            classroom_id = session.get("classroom_id")
+            if classroom_id:
+                classroom = db.get_classroom_by_id(classroom_id)
+
+        if not classroom:
+            admin_code = session.get("active_admin_code")
+            if admin_code:
+                classroom = db.get_classroom_by_code(admin_code)
+
+        if not classroom:
+            classroom = db.get_latest_classroom()
 
         if not classroom:
             demo_class = db.get_classroom_by_code("DEMO99")
             if not demo_class:
                 demo_class = db.create_classroom("DEMO99")
             classroom = demo_class
-            classroom_id = demo_class["id"]
 
+        classroom_id = classroom["id"] if classroom else None
         board = db.get_leaderboard(classroom_id) if classroom_id else []
         challenge_ended = not classroom.get("active", True) if classroom else False
 
         return jsonify({
             "leaderboard": board,
-            "challenge_ended": challenge_ended
+            "challenge_ended": challenge_ended,
+            "session_code": classroom.get("code") if classroom else ""
         })
     except Exception as e:
         app.logger.error(f"Error in api_leaderboard: {e}")

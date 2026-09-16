@@ -242,6 +242,34 @@ def get_classroom_by_id(classroom_id: str) -> Optional[Dict[str, Any]]:
     return dict(row) if row else None
 
 
+def get_latest_classroom() -> Optional[Dict[str, Any]]:
+    """Retrieves the most recently created active classroom session."""
+    if USE_FIREBASE and firestore_db:
+        try:
+            docs = firestore_db.collection("classroom_sessions").order_by("created_at", direction="DESCENDING").limit(5).stream()
+            non_demo = None
+            for doc in docs:
+                d = doc.to_dict()
+                d["id"] = doc.id
+                if d.get("code") != "DEMO99":
+                    return d
+                if not non_demo:
+                    non_demo = d
+            return non_demo
+        except Exception as e:
+            print(f"[Firebase] get_latest_classroom error: {e}")
+
+    conn = _get_sqlite_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM classroom_sessions WHERE code != 'DEMO99' ORDER BY created_at DESC LIMIT 1")
+    row = cur.fetchone()
+    if not row:
+        cur.execute("SELECT * FROM classroom_sessions ORDER BY created_at DESC LIMIT 1")
+        row = cur.fetchone()
+    conn.close()
+    return dict(row) if row else None
+
+
 def toggle_classroom_joining(classroom_id: str, joining_open: bool) -> bool:
     """Opens or closes joining for a classroom."""
     if USE_FIREBASE and firestore_db:

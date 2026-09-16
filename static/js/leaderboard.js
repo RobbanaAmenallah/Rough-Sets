@@ -77,7 +77,8 @@ function escapeHtml(str) {
 
 async function fetchLeaderboard(currentSessionPlayerId) {
     try {
-        const res = await fetch('/api/leaderboard');
+        const query = window.location.search || '';
+        const res = await fetch('/api/leaderboard' + query);
         if (!res.ok) return;
         const data = await res.json();
         renderLeaderboard(data.leaderboard || [], currentSessionPlayerId);
