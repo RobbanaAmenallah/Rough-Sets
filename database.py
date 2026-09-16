@@ -137,8 +137,8 @@ def init_sqlite_db():
     conn.close()
 
 
-if not USE_FIREBASE:
-    init_sqlite_db()
+# Always initialize SQLite tables so the fallback is always ready
+init_sqlite_db()
 
 
 def _get_sqlite_conn():

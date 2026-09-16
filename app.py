@@ -168,26 +168,35 @@ def result():
 @app.route("/leaderboard")
 def leaderboard():
     """Projector-friendly live classroom rankings."""
-    classroom_id = session.get("classroom_id")
-    classroom = db.get_classroom_by_id(classroom_id) if classroom_id else None
+    try:
+        classroom_id = session.get("classroom_id")
+        classroom = db.get_classroom_by_id(classroom_id) if classroom_id else None
 
-    # If no session in cookie, look for the most recent active classroom
-    if not classroom:
-        # Fallback to demo classroom or any active classroom
-        demo_class = db.get_classroom_by_code("DEMO99")
-        if demo_class:
+        if not classroom:
+            # Fallback to demo classroom or create default one
+            demo_class = db.get_classroom_by_code("DEMO99")
+            if not demo_class:
+                demo_class = db.create_classroom("DEMO99")
             classroom = demo_class
             classroom_id = demo_class["id"]
 
-    board_data = db.get_leaderboard(classroom_id) if classroom_id else []
-    challenge_ended = not classroom.get("active", True) if classroom else False
+        board_data = db.get_leaderboard(classroom_id) if classroom_id else []
+        challenge_ended = not classroom.get("active", True) if classroom else False
 
-    return render_template(
-        "leaderboard.html",
-        classroom=classroom,
-        leaderboard=board_data,
-        challenge_ended=challenge_ended
-    )
+        return render_template(
+            "leaderboard.html",
+            classroom=classroom,
+            leaderboard=board_data,
+            challenge_ended=challenge_ended
+        )
+    except Exception as e:
+        app.logger.error(f"Error loading leaderboard: {e}")
+        return render_template(
+            "leaderboard.html",
+            classroom={"code": "DEMO99", "active": True},
+            leaderboard=[],
+            challenge_ended=False
+        )
 
 
 # ==========================================================
@@ -506,22 +515,30 @@ def api_quiz_answer():
 @app.route("/api/leaderboard")
 def api_leaderboard():
     """Live polling endpoint for projector and client screens."""
-    classroom_id = session.get("classroom_id")
-    classroom = db.get_classroom_by_id(classroom_id) if classroom_id else None
+    try:
+        classroom_id = session.get("classroom_id")
+        classroom = db.get_classroom_by_id(classroom_id) if classroom_id else None
 
-    if not classroom:
-        demo_class = db.get_classroom_by_code("DEMO99")
-        if demo_class:
+        if not classroom:
+            demo_class = db.get_classroom_by_code("DEMO99")
+            if not demo_class:
+                demo_class = db.create_classroom("DEMO99")
             classroom = demo_class
             classroom_id = demo_class["id"]
 
-    board = db.get_leaderboard(classroom_id) if classroom_id else []
-    challenge_ended = not classroom.get("active", True) if classroom else False
+        board = db.get_leaderboard(classroom_id) if classroom_id else []
+        challenge_ended = not classroom.get("active", True) if classroom else False
 
-    return jsonify({
-        "leaderboard": board,
-        "challenge_ended": challenge_ended
-    })
+        return jsonify({
+            "leaderboard": board,
+            "challenge_ended": challenge_ended
+        })
+    except Exception as e:
+        app.logger.error(f"Error in api_leaderboard: {e}")
+        return jsonify({
+            "leaderboard": [],
+            "challenge_ended": False
+        })
 
 
 @app.route("/api/player")
